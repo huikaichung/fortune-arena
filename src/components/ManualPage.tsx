@@ -1,12 +1,163 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { StarField } from './three/StarField';
+import { getManual, type UserManual, type Chapter } from '@/lib/api';
 import styles from './ManualPage.module.css';
 
-// 假資料 - 之後換成 API
+interface Props {
+  manualId: string;
+}
+
+export function ManualPage({ manualId }: Props) {
+  const [manual, setManual] = useState<UserManual | null>(null);
+  const [activeChapter, setActiveChapter] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadManual() {
+      // Demo mode
+      if (manualId === 'demo') {
+        setManual(DEMO_MANUAL as unknown as UserManual);
+        setActiveChapter('identity');
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        const data = await getManual(manualId);
+        setManual(data);
+        // 設定第一個章節為 active
+        const firstChapter = Object.keys(data.chapters)[0];
+        if (firstChapter) setActiveChapter(firstChapter);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '載入失敗');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    loadManual();
+  }, [manualId]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <StarField />
+        <div className={styles.loading}>
+          <div className={styles.spinner} />
+          <p>載入中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !manual) {
+    return (
+      <div className={styles.container}>
+        <StarField />
+        <div className={styles.error}>
+          <p>❌ {error || '找不到使用說明書'}</p>
+          <Link href="/consult" className="btn btn-primary">
+            重新生成
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // 處理章節資料
+  const chapters = manual.chapters 
+    ? Object.entries(manual.chapters).map(([id, chapter]) => ({
+        id,
+        ...chapter,
+      }))
+    : (manual as any).chapters || [];
+  
+  const currentChapter = chapters.find((c: any) => c.id === activeChapter);
+
+  return (
+    <div className={styles.container}>
+      <StarField />
+
+      <header className={styles.header}>
+        <Link href="/" className={styles.backLink}>
+          ← 返回
+        </Link>
+        <h1>你的使用說明書</h1>
+        <button className={styles.shareBtn}>📤</button>
+      </header>
+
+      <main className={styles.main}>
+        {/* 封面卡片 */}
+        <div className={`card ${styles.coverCard}`}>
+          <h2 className={styles.coreLabel}>
+            {manual.profile?.core_label || (manual as any).profile?.coreLabel}
+          </h2>
+          <p className={styles.oneLiner}>
+            「{manual.profile?.one_liner || (manual as any).profile?.oneLiner}」
+          </p>
+        </div>
+
+        {/* 章節導航 */}
+        <nav className={styles.chapterNav}>
+          {chapters.map((chapter: any) => (
+            <button
+              key={chapter.id}
+              className={`${styles.chapterTab} ${activeChapter === chapter.id ? styles.active : ''}`}
+              onClick={() => setActiveChapter(chapter.id)}
+            >
+              {chapter.title}
+            </button>
+          ))}
+        </nav>
+
+        {/* 章節內容 */}
+        {currentChapter && (
+          <div className={`card ${styles.chapterContent}`}>
+            <h3>{currentChapter.title}</h3>
+            <p className={styles.chapterSummary}>{currentChapter.summary}</p>
+
+            <div className={styles.points}>
+              {currentChapter.points?.map((point: any, index: number) => (
+                <div key={index} className={styles.point}>
+                  <h4>{point.insight}</h4>
+                  <p>{point.explanation}</p>
+                  
+                  {(point.psychology || point.psychology_perspective) && (
+                    <div className={styles.psychology}>
+                      <span className={styles.psychologyLabel}>🧠 心理學視角</span>
+                      <p>{point.psychology || point.psychology_perspective}</p>
+                    </div>
+                  )}
+
+                  <div className={styles.sources}>
+                    {point.sources?.map((source: string) => (
+                      <span key={source} className={`tag tag-${source.toLowerCase()}`}>
+                        {source}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 對話 CTA */}
+        <Link href={`/chat?manual=${manualId}`} className={`btn btn-primary ${styles.chatCta}`}>
+          💬 與 AI 顧問對話
+        </Link>
+      </main>
+    </div>
+  );
+}
+
+// Demo 資料
 const DEMO_MANUAL = {
+  id: 'demo',
   profile: {
     coreLabel: '🔥 火象投射者 🔺',
     oneLiner: '照亮他人的引路人，用智慧點燃希望',
@@ -41,11 +192,6 @@ const DEMO_MANUAL = {
           explanation: '你能看穿事物的本質，理解他人沒注意到的模式和連結。',
           psychology: '這可能與較高的「模式識別」(Pattern Recognition) 能力相關。',
           sources: ['紫微', '人類圖'],
-        },
-        {
-          insight: '語言表達的天賦',
-          explanation: '你善於用言語啟發他人，把複雜的概念說得清楚易懂。',
-          sources: ['八字', '占星'],
         },
       ],
     },
@@ -86,101 +232,5 @@ const DEMO_MANUAL = {
         },
       ],
     },
-    {
-      id: 'energy',
-      title: '你的能量',
-      summary: '你的能量不是無限的，需要聰明地管理。',
-      points: [
-        {
-          insight: '你需要充足的休息',
-          explanation: '作為投射者，你不適合長時間高強度工作。品質比數量重要。',
-          psychology: '這呼應了「能量管理」(Energy Management) 的概念。',
-          sources: ['人類圖'],
-        },
-      ],
-    },
   ],
 };
-
-interface Props {
-  manualId: string;
-}
-
-export function ManualPage({ manualId }: Props) {
-  const [activeChapter, setActiveChapter] = useState('identity');
-  const manual = DEMO_MANUAL; // TODO: 從 API 取得
-
-  const currentChapter = manual.chapters.find(c => c.id === activeChapter);
-
-  return (
-    <div className={styles.container}>
-      <StarField />
-
-      <header className={styles.header}>
-        <Link href="/" className={styles.backLink}>
-          ← 返回
-        </Link>
-        <h1>你的使用說明書</h1>
-        <button className={styles.shareBtn}>📤</button>
-      </header>
-
-      <main className={styles.main}>
-        {/* 封面卡片 */}
-        <div className={`card ${styles.coverCard}`}>
-          <h2 className={styles.coreLabel}>{manual.profile.coreLabel}</h2>
-          <p className={styles.oneLiner}>「{manual.profile.oneLiner}」</p>
-        </div>
-
-        {/* 章節導航 */}
-        <nav className={styles.chapterNav}>
-          {manual.chapters.map((chapter) => (
-            <button
-              key={chapter.id}
-              className={`${styles.chapterTab} ${activeChapter === chapter.id ? styles.active : ''}`}
-              onClick={() => setActiveChapter(chapter.id)}
-            >
-              {chapter.title}
-            </button>
-          ))}
-        </nav>
-
-        {/* 章節內容 */}
-        {currentChapter && (
-          <div className={`card ${styles.chapterContent}`}>
-            <h3>{currentChapter.title}</h3>
-            <p className={styles.chapterSummary}>{currentChapter.summary}</p>
-
-            <div className={styles.points}>
-              {currentChapter.points.map((point, index) => (
-                <div key={index} className={styles.point}>
-                  <h4>{point.insight}</h4>
-                  <p>{point.explanation}</p>
-                  
-                  {point.psychology && (
-                    <div className={styles.psychology}>
-                      <span className={styles.psychologyLabel}>🧠 心理學視角</span>
-                      <p>{point.psychology}</p>
-                    </div>
-                  )}
-
-                  <div className={styles.sources}>
-                    {point.sources.map((source) => (
-                      <span key={source} className={`tag tag-${source.toLowerCase()}`}>
-                        {source}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 對話 CTA */}
-        <Link href="/chat" className={`btn btn-primary ${styles.chatCta}`}>
-          💬 與 AI 顧問對話
-        </Link>
-      </main>
-    </div>
-  );
-}

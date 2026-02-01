@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { StarField } from './three/StarField';
+import { chat } from '@/lib/api';
 import styles from './ChatPage.module.css';
 
 interface Message {
@@ -10,6 +12,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  sources?: string[];
 }
 
 const QUICK_PROMPTS = [
@@ -20,11 +23,17 @@ const QUICK_PROMPTS = [
 ];
 
 export function ChatPage() {
+  const searchParams = useSearchParams();
+  const manualId = searchParams.get('manual') || undefined;
+  const [conversationId, setConversationId] = useState<string | undefined>();
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       role: 'assistant',
-      content: '你好！有什麼想聊的嗎？我已經讀過你的使用說明書了 ✨\n\n我可以結合你的命盤資訊，幫你分析問題、提供建議。',
+      content: manualId 
+        ? '你好！有什麼想聊的嗎？我已經讀過你的使用說明書了 ✨\n\n我可以結合你的命盤資訊，幫你分析問題、提供建議。'
+        : '你好！有什麼想聊的嗎？\n\n你可以先生成使用說明書，讓我更了解你；或直接問問題，我會用梅花易數幫你分析。',
       timestamp: new Date(),
     },
   ]);
@@ -56,19 +65,34 @@ export function ChatPage() {
     setIsLoading(true);
 
     try {
-      // TODO: 呼叫真實 API
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await chat({
+        message: messageText,
+        manual_id: manualId,
+        conversation_id: conversationId,
+        include_meihua: true,
+      });
+      
+      // 更新 conversation ID
+      if (response.conversation_id) {
+        setConversationId(response.conversation_id);
+      }
 
-      // Mock response
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `讓我從你的使用說明書來看這個問題...\n\n作為一位「投射者」，你在做決定時最重要的是「等待被邀請」和「獲得認可」。\n\n從你的問題來看，這可能是一個需要耐心等待的時機。你的情緒權威提醒你：不要在情緒高點或低點做重大決定。\n\n💡 建議：給自己 24-48 小時沈澱，感受身體的直覺反應。`,
+        content: response.message.content,
         timestamp: new Date(),
+        sources: response.message.sources,
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      // Error handling
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: '抱歉，發生了錯誤。請稍後再試。',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +112,11 @@ export function ChatPage() {
       <header className={styles.header}>
         <Link href="/" className={styles.backLink}>☰</Link>
         <h1>AI 顧問</h1>
-        <Link href="/manual/demo" className={styles.manualLink}>📖 說明書</Link>
+        {manualId && (
+          <Link href={`/manual/${manualId}`} className={styles.manualLink}>
+            📖 說明書
+          </Link>
+        )}
       </header>
 
       <main className={styles.main}>
@@ -103,6 +131,15 @@ export function ChatPage() {
               )}
               <div className={styles.bubble}>
                 <p>{message.content}</p>
+                {message.sources && message.sources.length > 0 && (
+                  <div className={styles.sources}>
+                    {message.sources.map((source) => (
+                      <span key={source} className={`tag tag-${source.toLowerCase()}`}>
+                        {source}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               {message.role === 'user' && (
                 <span className={styles.avatar}>👤</span>

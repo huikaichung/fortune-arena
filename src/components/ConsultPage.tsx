@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { StarField } from './three/StarField';
+import { generateManual } from '@/lib/api';
 import styles from './ConsultPage.module.css';
 
 const PERSPECTIVES = [
@@ -63,16 +64,24 @@ export function ConsultPage() {
     setIsLoading(true);
     
     try {
-      // TODO: 呼叫 API 生成使用說明書
-      // const response = await generateManual({ ... });
+      const selectedPerspectives = perspectives
+        .filter(p => p.checked)
+        .map(p => p.id);
       
-      // 暫時模擬載入
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await generateManual({
+        birth_info: {
+          birth_date: birthDate,
+          birth_time: birthTime || undefined,
+          birth_place: birthPlace || undefined,
+          gender: gender || undefined,
+        },
+        perspectives: selectedPerspectives,
+      });
       
       // 導航到結果頁
-      router.push('/manual/demo');
+      router.push(`/manual/${response.id}`);
     } catch (err) {
-      setError('生成失敗，請稍後再試');
+      setError(err instanceof Error ? err.message : '生成失敗，請稍後再試');
     } finally {
       setIsLoading(false);
     }
