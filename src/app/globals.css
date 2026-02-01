@@ -1,0 +1,229 @@
+/* ===========================================
+   你的使用說明書 - Global Styles
+   =========================================== */
+
+:root {
+  /* 主色調 */
+  --color-bg-dark: #0F172A;
+  --color-bg-medium: #1E293B;
+  --color-gold: #F59E0B;
+  --color-gold-light: #FCD34D;
+  --color-text: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  
+  /* 五大視角專屬色 */
+  --color-meihua: #EC4899;    /* 梅花易數 - 粉 */
+  --color-ziwei: #8B5CF6;     /* 紫微斗數 - 紫 */
+  --color-bazi: #EF4444;      /* 八字命理 - 紅 */
+  --color-astro: #3B82F6;     /* 西洋占星 - 藍 */
+  --color-humandesign: #10B981; /* 人類圖 - 綠 */
+  
+  /* 風險等級色彩 */
+  --color-low: #10B981;
+  --color-medium: #F59E0B;
+  --color-high: #EF4444;
+  
+  /* 間距 */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* 圓角 */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* 陰影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.875rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+/* Links */
+a {
+  color: var(--color-gold);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--color-gold-light);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-gold) 0%, #EF4444 100%);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* Cards - Glassmorphism */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+}
+
+.card:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Input Fields */
+input, textarea, select {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.container-sm {
+  max-width: 640px;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-muted { color: var(--color-text-muted); }
+.text-gold { color: var(--color-gold); }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px var(--color-gold); }
+  50% { box-shadow: 0 0 20px var(--color-gold); }
+}
+
+.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+.animate-slideUp { animation: slideUp 0.5s ease-out; }
+.animate-pulse { animation: pulse 2s infinite; }
+
+/* Perspective Tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tag-meihua { background: rgba(236, 72, 153, 0.2); color: var(--color-meihua); }
+.tag-ziwei { background: rgba(139, 92, 246, 0.2); color: var(--color-ziwei); }
+.tag-bazi { background: rgba(239, 68, 68, 0.2); color: var(--color-bazi); }
+.tag-astro { background: rgba(59, 130, 246, 0.2); color: var(--color-astro); }
+.tag-humandesign { background: rgba(16, 185, 129, 0.2); color: var(--color-humandesign); }

@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Next.js
+.next/
+out/
+
 # Build
 dist/
 build/
@@ -22,3 +26,10 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

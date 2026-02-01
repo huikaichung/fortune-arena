@@ -1,0 +1,154 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.content.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sparkle {
+  display: inline-block;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.perspectives {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.perspective {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.perspective:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 20px currentColor;
+}
+
+.perspective-meihua { color: var(--color-meihua); }
+.perspective-ziwei { color: var(--color-ziwei); }
+.perspective-bazi { color: var(--color-bazi); }
+.perspective-astro { color: var(--color-astro); }
+.perspective-humandesign { color: var(--color-humandesign); }
+
+.perspectiveEmoji {
+  font-size: 1.75rem;
+}
+
+.perspectiveTooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-bg-medium);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  white-space: nowrap;
+  text-align: center;
+  z-index: 20;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.perspectiveTooltip strong {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.perspectiveTooltip span {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.ctaBtn {
+  font-size: 1.125rem;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+}
+
+.disclaimer {
+  margin-top: var(--spacing-xl);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.footer {
+  padding: var(--spacing-lg);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  z-index: 10;
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .perspective {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .perspectiveEmoji {
+    font-size: 1.5rem;
+  }
+}

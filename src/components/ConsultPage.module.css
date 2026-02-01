@@ -1,0 +1,148 @@
+.container {
+  min-height: 100vh;
+  position: relative;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.backLink {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.backLink:hover {
+  color: var(--color-gold);
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.main {
+  position: relative;
+  z-index: 10;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.error {
+  padding: var(--spacing-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  color: #EF4444;
+  font-size: 0.875rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.hint {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: var(--spacing-sm);
+}
+
+.radioGroup {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.radio input {
+  width: auto;
+}
+
+.advancedToggle {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.advancedToggle:hover {
+  color: var(--color-gold);
+}
+
+.perspectives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.perspectiveCheckbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.perspectiveCheckbox input {
+  width: auto;
+}
+
+.perspectiveCheckbox input:not(:checked) + .tag {
+  opacity: 0.5;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.privacy {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
