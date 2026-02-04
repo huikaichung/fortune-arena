@@ -1,79 +1,82 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { StarField } from './three/StarField';
 import styles from './HomePage.module.css';
 
 const PERSPECTIVES = [
-  { id: 'meihua', emoji: '🌸', name: '梅花易數', desc: '當下能量、事件預測' },
-  { id: 'ziwei', emoji: '💜', name: '紫微斗數', desc: '性格命盤、人生格局' },
-  { id: 'bazi', emoji: '🔥', name: '八字命理', desc: '五行能量、時運節奏' },
-  { id: 'astro', emoji: '⭐', name: '西洋占星', desc: '心理原型、行星能量' },
-  { id: 'humandesign', emoji: '🔺', name: '人類圖', desc: '能量中心、策略權威' },
+  { id: 'astro', emoji: '⭐', name: '占星', color: '#60A5FA' },
+  { id: 'bazi', emoji: '🔥', name: '八字', color: '#FB923C' },
+  { id: 'ziwei', emoji: '💜', name: '紫微', color: '#A78BFA' },
+  { id: 'meihua', emoji: '🌸', name: '梅花', color: '#F472B6' },
+  { id: 'humandesign', emoji: '🔺', name: '人類圖', color: '#34D399' },
 ];
 
 export function HomePage() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hoveredPerspective, setHoveredPerspective] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    // 頁面載入動畫
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setLoaded(true), 50);
+    return () => clearTimeout(t);
   }, []);
 
   return (
-    <div className={styles.container}>
-      {/* Three.js 星空背景 */}
-      <StarField />
+    <div className={styles.page}>
+      {/* Ambient background */}
+      <div className={styles.bgOrb1} />
+      <div className={styles.bgOrb2} />
+      <div className={styles.bgOrb3} />
 
-      {/* 主要內容 */}
-      <main className={`${styles.content} ${isLoaded ? styles.loaded : ''}`}>
+      <main className={`${styles.hero} ${loaded ? styles.visible : ''}`}>
+        {/* Badge */}
+        <div className={styles.badge}>
+          <span className={styles.badgeDot} />
+          結合命理 × 心理學的自我探索工具
+        </div>
+
+        {/* Title */}
         <h1 className={styles.title}>
-          <span className={styles.sparkle}>✨</span>
-          你的使用說明書
-          <span className={styles.sparkle}>✨</span>
+          你的<span className={styles.titleAccent}>使用說明書</span>
         </h1>
-        
+
         <p className={styles.subtitle}>
-          從五大視角，認識真正的自己
+          輸入出生資訊，從五大視角生成專屬於你的深度人格分析
         </p>
 
-        {/* 五大視角圖示 */}
+        {/* Perspective pills */}
         <div className={styles.perspectives}>
-          {PERSPECTIVES.map((p) => (
+          {PERSPECTIVES.map((p, i) => (
             <div
               key={p.id}
-              className={`${styles.perspective} ${styles[`perspective-${p.id}`]}`}
-              onMouseEnter={() => setHoveredPerspective(p.id)}
-              onMouseLeave={() => setHoveredPerspective(null)}
+              className={styles.pill}
+              style={{
+                '--pill-color': p.color,
+                animationDelay: `${i * 0.08}s`,
+              } as React.CSSProperties}
             >
-              <span className={styles.perspectiveEmoji}>{p.emoji}</span>
-              {hoveredPerspective === p.id && (
-                <div className={styles.perspectiveTooltip}>
-                  <strong>{p.name}</strong>
-                  <span>{p.desc}</span>
-                </div>
-              )}
+              <span>{p.emoji}</span>
+              <span>{p.name}</span>
             </div>
           ))}
         </div>
 
-        {/* CTA 按鈕 */}
-        <Link href="/consult" className={`btn btn-primary ${styles.ctaBtn}`}>
-          🔮 開始探索
+        {/* CTA */}
+        <Link href="/consult" className={`btn btn-primary ${styles.cta}`}>
+          開始探索自己
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </Link>
 
-        {/* 底部說明 */}
-        <p className={styles.disclaimer}>
-          結合心理學視角，讓洞見更實用、更可理解
+        {/* Social proof / trust */}
+        <p className={styles.trust}>
+          ✦ 免費使用 · 無需註冊 · 資料不儲存
         </p>
       </main>
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <p>本服務僅供自我探索參考，不構成專業建議</p>
+        僅供自我探索參考，不構成專業建議
       </footer>
     </div>
   );

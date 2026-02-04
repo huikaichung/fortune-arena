@@ -1,51 +1,63 @@
 /* ===========================================
-   你的使用說明書 - Global Styles
+   你的使用說明書 - Global Styles (MVP v2)
    =========================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-  /* 主色調 */
-  --color-bg-dark: #0F172A;
-  --color-bg-medium: #1E293B;
-  --color-gold: #F59E0B;
-  --color-gold-light: #FCD34D;
-  --color-text: #F8FAFC;
-  --color-text-muted: #94A3B8;
-  
-  /* 五大視角專屬色 */
-  --color-meihua: #EC4899;    /* 梅花易數 - 粉 */
-  --color-ziwei: #8B5CF6;     /* 紫微斗數 - 紫 */
-  --color-bazi: #EF4444;      /* 八字命理 - 紅 */
-  --color-astro: #3B82F6;     /* 西洋占星 - 藍 */
-  --color-humandesign: #10B981; /* 人類圖 - 綠 */
-  
-  /* 風險等級色彩 */
-  --color-low: #10B981;
-  --color-medium: #F59E0B;
-  --color-high: #EF4444;
-  
-  /* 間距 */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  
-  /* 圓角 */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  /* Core palette */
+  --color-bg: #080B16;
+  --color-bg-elevated: #0D1224;
+  --color-bg-card: rgba(255, 255, 255, 0.04);
+  --color-bg-card-hover: rgba(255, 255, 255, 0.07);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Text */
+  --color-text: #E8ECF4;
+  --color-text-secondary: #8B95A9;
+  --color-text-tertiary: #555F73;
+
+  /* Accent */
+  --color-accent: #A78BFA;
+  --color-accent-soft: rgba(167, 139, 250, 0.15);
+  --color-accent-glow: rgba(167, 139, 250, 0.25);
+
+  /* CTA gradient */
+  --gradient-cta: linear-gradient(135deg, #A78BFA 0%, #EC4899 50%, #F59E0B 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #C4B5FD 0%, #F472B6 50%, #FCD34D 100%);
+
+  /* Perspective colors */
+  --color-meihua: #F472B6;
+  --color-ziwei: #A78BFA;
+  --color-bazi: #FB923C;
+  --color-astro: #60A5FA;
+  --color-humandesign: #34D399;
+  --color-psychology: #FBBF24;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
-  
-  /* 陰影 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.3);
 }
 
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -53,177 +65,174 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+  font-family: 'Noto Sans TC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
+h1, h2, h3, h4 {
+  font-weight: 600;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.05rem; }
 
 @media (max-width: 640px) {
-  h1 { font-size: 1.875rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.25rem; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.375rem; }
 }
 
-/* Links */
 a {
-  color: var(--color-gold);
+  color: var(--color-accent);
   text-decoration: none;
   transition: color 0.2s;
 }
-
-a:hover {
-  color: var(--color-gold-light);
-}
+a:hover { color: #C4B5FD; }
 
 /* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
   border: none;
   border-radius: var(--radius-lg);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-gold) 0%, #EF4444 100%);
+  background: var(--gradient-cta);
   color: white;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 24px rgba(167, 139, 250, 0.25);
 }
-
 .btn-primary:hover {
+  background: var(--gradient-cta-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 8px 32px rgba(167, 139, 250, 0.35);
+}
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-.btn-secondary {
+.btn-ghost {
   background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+.btn-ghost:hover {
   color: var(--color-text);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-color: var(--color-border-hover);
+  background: var(--color-bg-card);
 }
 
-.btn-secondary:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
-}
-
-/* Cards - Glassmorphism */
+/* Cards */
 .card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
+  padding: var(--space-8);
+  backdrop-filter: blur(20px);
+  transition: border-color 0.3s, background 0.3s;
 }
-
 .card:hover {
-  border-color: rgba(245, 158, 11, 0.3);
+  border-color: var(--color-border-hover);
+  background: var(--color-bg-card-hover);
 }
 
-/* Input Fields */
+/* Form elements */
 input, textarea, select {
   width: 100%;
-  padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
-  transition: border-color 0.2s;
-}
-
-input:focus, textarea:focus, select:focus {
+  transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
-  border-color: var(--color-gold);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+input::placeholder {
+  color: var(--color-text-tertiary);
 }
 
-input::placeholder, textarea::placeholder {
-  color: var(--color-text-muted);
+/* Source tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
-
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-}
-
-.container-sm {
-  max-width: 640px;
-}
-
-/* Utility Classes */
-.text-center { text-align: center; }
-.text-muted { color: var(--color-text-muted); }
-.text-gold { color: var(--color-gold); }
-
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.gap-sm { gap: var(--spacing-sm); }
-.gap-md { gap: var(--spacing-md); }
-.gap-lg { gap: var(--spacing-lg); }
+.tag-占星, .tag-astro { background: rgba(96, 165, 250, 0.12); color: var(--color-astro); }
+.tag-八字, .tag-bazi { background: rgba(251, 146, 60, 0.12); color: var(--color-bazi); }
+.tag-紫微, .tag-ziwei { background: rgba(167, 139, 250, 0.12); color: var(--color-ziwei); }
+.tag-梅花, .tag-meihua { background: rgba(244, 114, 182, 0.12); color: var(--color-meihua); }
+.tag-人類圖, .tag-humandesign { background: rgba(52, 211, 153, 0.12); color: var(--color-humandesign); }
+.tag-心理學 { background: rgba(251, 191, 36, 0.12); color: var(--color-psychology); }
 
 /* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* Selection */
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-text);
 }
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px var(--color-gold); }
-  50% { box-shadow: 0 0 20px var(--color-gold); }
-}
-
-.animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-.animate-slideUp { animation: slideUp 0.5s ease-out; }
-.animate-pulse { animation: pulse 2s infinite; }
-
-/* Perspective Tags */
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.tag-meihua { background: rgba(236, 72, 153, 0.2); color: var(--color-meihua); }
-.tag-ziwei { background: rgba(139, 92, 246, 0.2); color: var(--color-ziwei); }
-.tag-bazi { background: rgba(239, 68, 68, 0.2); color: var(--color-bazi); }
-.tag-astro { background: rgba(59, 130, 246, 0.2); color: var(--color-astro); }
-.tag-humandesign { background: rgba(16, 185, 129, 0.2); color: var(--color-humandesign); }

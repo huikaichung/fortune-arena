@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   
   // 環境變數
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://selfkit-backend-22akuoiitq-an.a.run.app/api/v1',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://selfkit-backend-129518505568.asia-northeast1.run.app/api/v1',
   },
 };
 
