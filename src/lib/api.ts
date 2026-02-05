@@ -120,3 +120,24 @@ export async function getManual(manualId: string): Promise<UserManual> {
 
   return response.json();
 }
+
+export type DetailSystem = 'western' | 'ziwei' | 'bazi' | 'human_design' | 'meihua';
+
+export interface DetailResponse {
+  system: string;
+  data: Record<string, unknown>;
+}
+
+/**
+ * Get detailed reading for a specific system
+ */
+export async function getManualDetail(manualId: string, system: DetailSystem): Promise<DetailResponse> {
+  const response = await fetch(`${API_URL}/manual/${manualId}/detail/${system}`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || '載入失敗');
+  }
+
+  return response.json();
+}
