@@ -19,17 +19,17 @@
   top: -15%;
   left: -10%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(127, 90, 240, 0.07) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(127, 90, 240, 0.06) 0%, transparent 65%);
   filter: blur(80px);
 }
-.orbGreen {
+.orbRose {
   position: absolute;
   width: 400px;
   height: 400px;
   bottom: -10%;
   right: -10%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(44, 182, 125, 0.05) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(232, 121, 168, 0.04) 0%, transparent 65%);
   filter: blur(80px);
 }
 
@@ -66,7 +66,6 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-body);
-  font-family: 'Space Grotesk', 'Noto Sans TC', sans-serif;
 }
 .shareBtn {
   display: flex;
@@ -90,171 +89,212 @@
 .main {
   position: relative;
   z-index: 1;
-  max-width: 660px;
+  max-width: 640px;
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4) var(--space-16);
+  padding: 0 var(--space-5) var(--space-16);
 }
 
-/* ===== Profile Card — gradient border effect ===== */
-.profileCardWrapper {
-  padding: 1px;
-  border-radius: var(--radius-2xl);
-  background: var(--gradient-accent);
-  margin-bottom: var(--space-8);
-  animation: fadeInUp 0.6s ease;
-}
-.profileCard {
+/* ===== 1. Profile Hero ===== */
+.profileHero {
   text-align: center;
-  padding: var(--space-10) var(--space-6);
-  background: var(--bg-primary);
-  border-radius: calc(var(--radius-2xl) - 1px);
+  padding: var(--space-16) var(--space-4) var(--space-10);
+  animation: fadeInUp 0.8s ease;
 }
 .profileLabel {
-  font-size: 1.875rem;
+  font-size: clamp(2rem, 5vw, 2.8rem);
   font-weight: 700;
-  font-family: 'Space Grotesk', 'Noto Sans TC', sans-serif;
-  margin-bottom: var(--space-3);
   line-height: 1.3;
+  margin-bottom: var(--space-4);
   color: var(--text-headline);
+  letter-spacing: -0.01em;
 }
-.profileLiner {
-  font-size: 1rem;
+.profileTagline {
+  font-size: 1.05rem;
   color: var(--text-body);
-  font-style: italic;
+  line-height: 1.8;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
-/* ===== Chapter Tabs — horizontal scroll with active line ===== */
-.tabs {
-  display: flex;
-  gap: var(--space-1);
-  overflow-x: auto;
-  padding-bottom: var(--space-2);
-  margin-bottom: var(--space-6);
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  border-bottom: 1px solid var(--border);
+/* ===== 2. Spectrum Section ===== */
+.spectrumSection {
+  padding: var(--space-6) 0 var(--space-12);
+  animation: fadeIn 1s ease 0.3s both;
 }
-.tabs::-webkit-scrollbar { display: none; }
 
-.tab {
+/* ===== 3. Sections Container ===== */
+.sectionsContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: var(--space-3) var(--space-4);
-  min-width: 72px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-family: inherit;
-  cursor: pointer;
-  transition: color 0.25s;
-  flex-shrink: 0;
-  position: relative;
-  padding-bottom: var(--space-4);
+  gap: 0;
 }
-.tab:hover {
-  color: var(--text-body);
+
+/* Individual section */
+.section {
+  padding: var(--space-10) 0;
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.tabActive {
+.sectionVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sectionHeading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-5);
   color: var(--text-headline);
-}
-.tabEmoji { font-size: 1.25rem; }
-.tabLabel { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
-
-/* Active indicator line */
-.tabIndicator {
-  position: absolute;
-  bottom: -1px;
-  left: 15%;
-  right: 15%;
-  height: 2px;
-  background: var(--accent-primary);
-  border-radius: 1px;
-  animation: slideInLine 0.25s ease;
-  transform-origin: center;
+  line-height: 1.4;
 }
 
-/* ===== Chapter Content ===== */
-.chapter {
-  animation: fadeIn 0.35s ease;
-}
-.chapterSummary {
-  color: var(--text-body);
-  font-size: 0.93rem;
-  line-height: 1.8;
-  margin-bottom: var(--space-6);
-  padding: 0 var(--space-2);
-}
-
-/* ===== Insight Cards — glassmorphic with border glow ===== */
-.insights {
+.sectionContent {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
-.insightCard {
-  background: var(--glass-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
-  animation: fadeInUp 0.5s ease both;
-  backdrop-filter: blur(8px);
-}
-.insightCard:hover {
-  border-color: rgba(127, 90, 240, 0.2);
-  box-shadow: 0 0 24px rgba(127, 90, 240, 0.08);
-  background: var(--glass-bg-hover);
+.sectionContent p {
+  font-size: 0.95rem;
+  color: var(--text-body);
+  line-height: 1.9;
 }
 
-.insightTitle {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: var(--space-3);
-  color: var(--text-headline);
-  font-family: 'Space Grotesk', 'Noto Sans TC', sans-serif;
+/* Sub points */
+.subPoints {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
-.insightText {
+.subPoint {
+  display: flex;
+  gap: var(--space-3);
   font-size: 0.9rem;
   color: var(--text-body);
-  line-height: 1.8;
-  margin-bottom: var(--space-4);
+  line-height: 1.7;
+}
+.subPointDash {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  user-select: none;
 }
 
-/* ===== Psychology Box ===== */
-.psychBox {
-  background: rgba(251, 191, 36, 0.04);
-  border: 1px solid rgba(251, 191, 36, 0.1);
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-4);
-}
-.psychLabel {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--color-psychology);
-  margin-bottom: var(--space-1);
-  letter-spacing: 0.03em;
-}
-.psychBox p {
-  font-size: 0.85rem;
-  color: var(--text-body);
-  line-height: 1.65;
+/* ===== 4. Lucky Section ===== */
+.luckySection {
+  padding: var(--space-10) 0;
+  border-top: 1px solid var(--border);
 }
 
-/* Source tags */
-.sources {
+.luckyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-4);
+}
+
+.luckyItem {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.luckyLabel {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.luckyValue {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-headline);
+  display: flex;
+  align-items: center;
   gap: var(--space-2);
 }
 
-/* Bottom CTA */
-.bottomCta {
-  margin-top: var(--space-12);
+.colorSwatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+/* ===== 5. Deep Data ===== */
+.deepDataSection {
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--border);
+}
+
+.deepDataTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  padding: var(--space-2) 0;
+  transition: color 0.2s;
+}
+.deepDataTrigger:hover {
+  color: var(--text-body);
+}
+.deepDataTrigger svg {
+  transition: transform 0.3s ease;
+}
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.deepDataContent {
+  margin-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  animation: fadeIn 0.3s ease;
+}
+.deepDataRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--glass-bg);
+  border-radius: var(--radius-md);
+}
+.deepDataLabel {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  min-width: 48px;
+  font-weight: 500;
+}
+.deepDataValue {
+  font-size: 0.92rem;
+  color: var(--text-headline);
+}
+
+/* ===== 6. Actions ===== */
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  padding: var(--space-10) 0 var(--space-6);
+}
+
+/* ===== 7. Footer ===== */
+.footer {
   text-align: center;
+  padding: var(--space-6) 0 var(--space-8);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
 }
 
 /* ===== Loading / Error ===== */
@@ -267,14 +307,15 @@
   gap: var(--space-4);
   color: var(--text-body);
 }
-.spinner {
-  width: 32px;
-  height: 32px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent-primary);
+.loadingOrb {
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  background: var(--accent-primary);
+  animation: pulse-soft 2s ease-in-out infinite;
+  opacity: 0.6;
 }
+
 .errorState {
   min-height: 100vh;
   display: flex;
@@ -285,7 +326,6 @@
   text-align: center;
   padding: var(--space-8);
 }
-.errorIcon { font-size: 3rem; }
 .errorState h2 { font-size: 1.25rem; }
 .errorMsg {
   color: var(--text-body);
@@ -295,14 +335,22 @@
 
 /* ===== Mobile ===== */
 @media (max-width: 640px) {
-  .profileLabel { font-size: 1.5rem; }
-  .insightCard { padding: var(--space-5); }
-  .tab {
-    min-width: 64px;
-    padding: var(--space-2) var(--space-3);
-    padding-bottom: var(--space-3);
+  .main {
+    padding: 0 var(--space-4) var(--space-12);
   }
-  .profileCard {
-    padding: var(--space-8) var(--space-4);
+  .profileLabel {
+    font-size: 1.8rem;
+  }
+  .profileHero {
+    padding: var(--space-12) var(--space-2) var(--space-8);
+  }
+  .sectionHeading {
+    font-size: 1.3rem;
+  }
+  .section {
+    padding: var(--space-8) 0;
+  }
+  .luckyGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

@@ -19,7 +19,7 @@
   top: -15%;
   right: -10%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(127, 90, 240, 0.08) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(127, 90, 240, 0.07) 0%, transparent 65%);
   filter: blur(80px);
 }
 
@@ -45,12 +45,12 @@
 .main {
   position: relative;
   z-index: 10;
-  max-width: 480px;
+  max-width: 460px;
   margin: 0 auto;
   padding: 0 var(--space-6) var(--space-16);
 }
 
-/* Glassmorphic card */
+/* Card */
 .card {
   background: var(--glass-bg);
   border: 1px solid var(--border);
@@ -64,12 +64,13 @@
   margin-bottom: var(--space-8);
 }
 .formHeader h1 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   margin-bottom: var(--space-2);
 }
 .formHeader p {
   color: var(--text-body);
   font-size: 0.9rem;
+  line-height: 1.7;
 }
 
 /* Form */
@@ -97,7 +98,6 @@
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-body);
-  font-family: 'Space Grotesk', 'Noto Sans TC', sans-serif;
 }
 .required { color: var(--accent-primary); }
 .hint {
@@ -130,37 +130,6 @@
   border-color: var(--accent-primary);
   background: var(--accent-primary-soft);
   color: var(--text-headline);
-  box-shadow: 0 0 16px rgba(127, 90, 240, 0.15);
-}
-
-/* Perspective chips */
-.perspectiveGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.perspectiveChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 15px;
-  background: var(--glass-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  color: var(--text-body);
-  font-size: 0.85rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.perspectiveChip:hover {
-  border-color: var(--border-hover);
-  background: var(--glass-bg-hover);
-}
-.perspectiveActive {
-  border-color: var(--accent-primary);
-  background: var(--accent-primary-soft);
-  color: var(--text-headline);
 }
 
 /* Submit */
@@ -184,62 +153,62 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-8);
+  gap: var(--space-6);
   position: relative;
   z-index: 2;
+  padding: var(--space-8);
 }
 
-/* Orbital animation */
-.orbitalContainer {
+/* Pulsing orb */
+.orbContainer {
   position: relative;
   width: 80px;
   height: 80px;
+  margin-bottom: var(--space-4);
 }
-.orbitalCenter {
+.orb {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
   border-radius: 50%;
-  background: var(--accent-primary);
-  box-shadow: 0 0 16px var(--accent-primary-glow);
+  background: var(--gradient-accent);
+  animation: pulse-soft 2.5s ease-in-out infinite;
 }
-.orbiter {
+.orbRing {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
+  inset: 0;
   border-radius: 50%;
-  animation: orbit linear infinite;
-}
-.orbiter1 {
-  background: var(--accent-primary);
-  animation-duration: 2s;
-  box-shadow: 0 0 8px var(--accent-primary-glow);
-}
-.orbiter2 {
-  background: var(--accent-secondary);
-  animation-duration: 3s;
-  animation-delay: -0.5s;
-  box-shadow: 0 0 8px rgba(44, 182, 125, 0.3);
-}
-.orbiter3 {
-  background: #60A5FA;
-  animation-duration: 4s;
-  animation-delay: -1s;
-  box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
+  border: 1px solid rgba(127, 90, 240, 0.15);
+  animation: pulse-soft 2.5s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
 .loadingText {
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-headline);
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.5s ease;
+  text-align: center;
 }
+
+/* Progress bar */
+.progressTrack {
+  width: 200px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progressBar {
+  height: 100%;
+  background: var(--gradient-accent);
+  border-radius: 2px;
+  transition: width 0.3s ease-out;
+}
+
 .loadingHint {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -252,7 +221,7 @@
     border-radius: var(--radius-xl);
   }
   .formHeader h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   .main {
     padding: 0 var(--space-4) var(--space-12);

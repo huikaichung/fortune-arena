@@ -1,5 +1,5 @@
 /**
- * API Client for SelfKit Backend
+ * API Client for knowyourself — v2
  */
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://selfkit-backend-129518505568.asia-northeast1.run.app/api/v1';
@@ -14,48 +14,51 @@ export interface BirthInfo {
 
 export interface GenerateManualRequest {
   birth_info: BirthInfo;
-  perspectives?: string[];
+}
+
+export interface SpectrumData {
+  action: number;
+  social: number;
+  creativity: number;
+  analysis: number;
+  intuition: number;
+  resilience: number;
+}
+
+export interface Section {
+  id: string;
+  heading: string;
+  content: string;
+  sub_points?: string[];
+}
+
+export interface LuckyGuide {
+  color: string;
+  number: number;
+  direction: string;
+  element: string;
+  season: string;
+}
+
+export interface DeepData {
+  zodiac_name: string;
+  zodiac_element: string;
+  chinese_zodiac: string;
+  chinese_element: string;
 }
 
 export interface UserManual {
   id: string;
-  user_id: string;
+  birth_date: string;
   generated_at: string;
   profile: {
-    core_label: string;
-    one_liner: string;
+    label: string;
+    tagline: string;
   };
-  chapters: Record<string, Chapter>;
-}
-
-export interface Chapter {
-  title: string;
-  summary: string;
-  points: InsightPoint[];
-}
-
-export interface InsightPoint {
-  insight: string;
-  explanation: string;
-  psychology_perspective?: string;
-  sources: string[];
-  confidence: 'high' | 'medium' | 'low';
-}
-
-export interface ChatRequest {
-  message: string;
-  manual_id?: string;
-  conversation_id?: string;
-  include_meihua?: boolean;
-}
-
-export interface ChatResponse {
-  conversation_id: string;
-  message: {
-    role: 'assistant';
-    content: string;
-    sources?: string[];
-  };
+  spectrum: SpectrumData;
+  sections: Section[];
+  lucky: LuckyGuide;
+  deep_data: DeepData;
 }
 
 /**
@@ -71,8 +74,8 @@ export async function generateManual(request: GenerateManualRequest): Promise<Us
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || '生成失敗');
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || '生成失敗');
   }
 
   return response.json();
@@ -86,26 +89,6 @@ export async function getManual(manualId: string): Promise<UserManual> {
 
   if (!response.ok) {
     throw new Error('找不到使用說明書');
-  }
-
-  return response.json();
-}
-
-/**
- * Chat with AI Advisor
- */
-export async function chat(request: ChatRequest): Promise<ChatResponse> {
-  const response = await fetch(`${API_URL}/chat`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(request),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || '對話失敗');
   }
 
   return response.json();

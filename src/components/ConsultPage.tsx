@@ -1,25 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { generateManual } from '@/lib/api';
 import styles from './ConsultPage.module.css';
 
-const PERSPECTIVES = [
-  { id: 'astro', emoji: '⭐', name: '占星' },
-  { id: 'bazi', emoji: '🔥', name: '八字' },
-  { id: 'ziwei', emoji: '💜', name: '紫微' },
-  { id: 'meihua', emoji: '🌸', name: '梅花' },
-  { id: 'humandesign', emoji: '🔺', name: '人類圖' },
-];
-
-const LOADING_MESSAGES = [
-  '正在解讀星象能量...',
-  '分析八字五行分佈...',
-  '計算紫微命盤格局...',
-  '融合心理學視角...',
-  '生成你的使用說明書...',
+const LOADING_PHASES = [
+  '正在解讀你的星象密碼...',
+  '描繪你的性格光譜...',
+  '書寫屬於你的故事...',
 ];
 
 export function ConsultPage() {
@@ -28,18 +18,35 @@ export function ConsultPage() {
   const [birthTime, setBirthTime] = useState('');
   const [birthPlace, setBirthPlace] = useState('');
   const [gender, setGender] = useState<'male' | 'female' | ''>('');
-  const [perspectives, setPerspectives] = useState(
-    PERSPECTIVES.map(p => ({ ...p, checked: true }))
-  );
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMsg, setLoadingMsg] = useState('');
+  const [loadingPhase, setLoadingPhase] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  const handleToggle = (id: string) => {
-    setPerspectives(prev =>
-      prev.map(p => (p.id === id ? { ...p, checked: !p.checked } : p))
-    );
-  };
+  useEffect(() => {
+    if (!isLoading) return;
+    
+    // Phase cycling
+    const phaseInterval = setInterval(() => {
+      setLoadingPhase(prev => {
+        if (prev < LOADING_PHASES.length - 1) return prev + 1;
+        return prev;
+      });
+    }, 4000);
+
+    // Smooth progress
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev < 85) return prev + Math.random() * 3;
+        return prev;
+      });
+    }, 300);
+
+    return () => {
+      clearInterval(phaseInterval);
+      clearInterval(progressInterval);
+    };
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,21 +55,10 @@ export function ConsultPage() {
       return;
     }
 
-    const selected = perspectives.filter(p => p.checked);
-    if (selected.length === 0) {
-      setError('請至少選擇一個視角');
-      return;
-    }
-
     setError(null);
     setIsLoading(true);
-
-    let idx = 0;
-    setLoadingMsg(LOADING_MESSAGES[0]);
-    const interval = setInterval(() => {
-      idx = (idx + 1) % LOADING_MESSAGES.length;
-      setLoadingMsg(LOADING_MESSAGES[idx]);
-    }, 2500);
+    setLoadingPhase(0);
+    setProgress(0);
 
     try {
       const result = await generateManual({
@@ -72,12 +68,12 @@ export function ConsultPage() {
           birth_place: birthPlace || undefined,
           gender: gender || undefined,
         },
-        perspectives: selected.map(p => p.id),
       });
-      clearInterval(interval);
-      router.push(`/manual/${result.id}`);
+      setProgress(100);
+      setTimeout(() => {
+        router.push(`/manual/${result.id}`);
+      }, 300);
     } catch (err) {
-      clearInterval(interval);
       setError(err instanceof Error ? err.message : '生成失敗，請稍後再試');
       setIsLoading(false);
     }
@@ -86,19 +82,27 @@ export function ConsultPage() {
   if (isLoading) {
     return (
       <div className={styles.page}>
-        <div className={styles.meshBg}>
-          <div className={styles.orbPurple} />
-        </div>
         <div className={styles.loadingScreen}>
-          {/* Orbital animation */}
-          <div className={styles.orbitalContainer}>
-            <div className={styles.orbitalCenter} />
-            <span className={`${styles.orbiter} ${styles.orbiter1}`} />
-            <span className={`${styles.orbiter} ${styles.orbiter2}`} />
-            <span className={`${styles.orbiter} ${styles.orbiter3}`} />
+          {/* Pulsing orb */}
+          <div className={styles.orbContainer}>
+            <div className={styles.orb} />
+            <div className={styles.orbRing} />
           </div>
-          <p className={styles.loadingText}>{loadingMsg}</p>
-          <p className={styles.loadingHint}>通常需要 10-20 秒</p>
+
+          {/* Phased message */}
+          <p className={styles.loadingText} key={loadingPhase}>
+            {LOADING_PHASES[loadingPhase]}
+          </p>
+
+          {/* Progress bar */}
+          <div className={styles.progressTrack}>
+            <div
+              className={styles.progressBar}
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            />
+          </div>
+
+          <p className={styles.loadingHint}>通常需要 15-25 秒</p>
         </div>
       </div>
     );
@@ -106,7 +110,7 @@ export function ConsultPage() {
 
   return (
     <div className={styles.page}>
-      {/* Background mesh */}
+      {/* Background */}
       <div className={styles.meshBg}>
         <div className={styles.orbPurple} />
       </div>
@@ -121,11 +125,10 @@ export function ConsultPage() {
       </header>
 
       <main className={styles.main}>
-        {/* Glassmorphic card */}
         <div className={styles.card}>
           <div className={styles.formHeader}>
             <h1>輸入出生資訊</h1>
-            <p>我們會根據你的資訊，從多個視角生成個人化分析</p>
+            <p>我們會根據你的出生資訊，寫一份專屬於你的說明書</p>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -183,25 +186,7 @@ export function ConsultPage() {
                     className={`${styles.genderBtn} ${gender === g ? styles.genderActive : ''}`}
                     onClick={() => setGender(gender === g ? '' : g)}
                   >
-                    {g === 'male' ? '♂ 男' : '♀ 女'}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Perspectives */}
-            <div className={styles.field}>
-              <label>分析視角</label>
-              <div className={styles.perspectiveGrid}>
-                {perspectives.map(p => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    className={`${styles.perspectiveChip} ${p.checked ? styles.perspectiveActive : ''}`}
-                    onClick={() => handleToggle(p.id)}
-                  >
-                    <span>{p.emoji}</span>
-                    <span>{p.name}</span>
+                    {g === 'male' ? '男' : '女'}
                   </button>
                 ))}
               </div>
@@ -209,10 +194,10 @@ export function ConsultPage() {
 
             {/* Submit */}
             <button type="submit" className={`btn btn-primary ${styles.submit}`}>
-              ✨ 生成我的使用說明書
+              生成我的使用說明書
             </button>
 
-            <p className={styles.privacy}>🔒 資料不儲存，僅用於即時分析</p>
+            <p className={styles.privacy}>資料不儲存，僅用於即時分析</p>
           </form>
         </div>
       </main>
