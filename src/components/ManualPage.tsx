@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { getManual, type UserManual } from '@/lib/api';
 import { RadarChart } from './RadarChart';
 import styles from './ManualPage.module.css';
@@ -65,7 +66,7 @@ export function ManualPage({ manualId }: Props) {
   const [manual, setManual] = useState<UserManual | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deepDataOpen, setDeepDataOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function load() {
@@ -95,7 +96,7 @@ export function ManualPage({ manualId }: Props) {
       <div className={styles.page}>
         <div className={styles.loading}>
           <div className={styles.loadingOrb} />
-          <p className={styles.loadingText}>正在打開你的書...</p>
+          <p className={styles.loadingText}>載入中...</p>
         </div>
       </div>
     );
@@ -105,10 +106,10 @@ export function ManualPage({ manualId }: Props) {
     return (
       <div className={styles.page}>
         <div className={styles.errorState}>
-          <h2>找不到這本書</h2>
-          <p className={styles.errorMsg}>{error || '可能已經闔上了，再寫一本吧'}</p>
+          <h2>找不到說明書</h2>
+          <p className={styles.errorMsg}>{error || '可能已過期，請重新生成'}</p>
           <Link href="/consult" className="btn btn-primary">
-            重新書寫
+            重新生成
           </Link>
         </div>
       </div>
@@ -141,13 +142,6 @@ export function ManualPage({ manualId }: Props) {
       </header>
 
       <main className={styles.main}>
-        {/* Book intro */}
-        <div className={styles.bookIntro}>
-          <p className={styles.bookIntroText}>
-            這是我為你寫的。翻到任何一頁，都是關於你的。
-          </p>
-        </div>
-
         {/* 1. HERO — Profile */}
         <div className={styles.profileHero}>
           <h1 className={styles.profileLabel}>{manual.profile.label}</h1>
@@ -156,7 +150,7 @@ export function ManualPage({ manualId }: Props) {
 
         {/* 2. SPECTRUM RADAR CHART */}
         <div className={styles.spectrumSection}>
-          <p className={styles.spectrumIntro}>你的性格光譜</p>
+          <p className={styles.spectrumIntro}>性格光譜</p>
           <RadarChart spectrum={manual.spectrum} />
         </div>
 
@@ -175,7 +169,7 @@ export function ManualPage({ manualId }: Props) {
 
         {/* 4. LUCKY GUIDE */}
         <div className={styles.luckySection}>
-          <h2 className={styles.sectionHeading}>屬於你的幸運符號</h2>
+          <h2 className={styles.sectionHeading}>幸運符號</h2>
           <div className={styles.luckyGrid}>
             <div className={styles.luckyItem}>
               <span className={styles.luckyLabel}>顏色</span>
@@ -206,44 +200,24 @@ export function ManualPage({ manualId }: Props) {
           </div>
         </div>
 
-        {/* 5. DEEP DATA — collapsible */}
-        <div className={styles.deepDataSection}>
-          <button
-            className={styles.deepDataTrigger}
-            onClick={() => setDeepDataOpen(!deepDataOpen)}
-          >
-            <span>底層資料</span>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              className={deepDataOpen ? styles.chevronOpen : ''}
-            >
-              <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* 5. DETAIL LINK */}
+        <div className={styles.detailLink}>
+          <Link href={`/manual/${manualId}/details`} className={styles.detailBtn}>
+            <span>查看詳細資料</span>
+            <span className={styles.detailHint}>星座命盤 · 八字 · 人類圖</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={styles.chevronRight}>
+              <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </button>
-          {deepDataOpen && (
-            <div className={styles.deepDataContent}>
-              <div className={styles.deepDataRow}>
-                <span className={styles.deepDataLabel}>星座</span>
-                <span className={styles.deepDataValue}>{manual.deep_data.zodiac_name} ({manual.deep_data.zodiac_element})</span>
-              </div>
-              <div className={styles.deepDataRow}>
-                <span className={styles.deepDataLabel}>生肖</span>
-                <span className={styles.deepDataValue}>{manual.deep_data.chinese_element}{manual.deep_data.chinese_zodiac}</span>
-              </div>
-            </div>
-          )}
+          </Link>
         </div>
 
         {/* 6. ACTIONS */}
         <div className={styles.actions}>
           <button className="btn btn-ghost" onClick={handleShare}>
-            把這本書分享給朋友
+            分享給朋友
           </button>
           <Link href="/consult" className="btn btn-ghost">
-            再寫一本
+            重新生成
           </Link>
         </div>
 

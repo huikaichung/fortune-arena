@@ -40,11 +40,38 @@ export interface LuckyGuide {
   season: string;
 }
 
+export interface WesternAstro {
+  sun_sign: string;
+  sun_element: string;
+  moon_sign?: string;
+  rising_sign?: string;
+  sun_traits?: string;
+}
+
+export interface ChineseAstro {
+  zodiac: string;
+  element: string;
+  bazi_day_master?: string;
+  bazi_summary?: string;
+}
+
+export interface HumanDesignData {
+  type?: string;
+  strategy?: string;
+  authority?: string;
+  profile?: string;
+}
+
 export interface DeepData {
+  // Legacy
   zodiac_name: string;
   zodiac_element: string;
   chinese_zodiac: string;
   chinese_element: string;
+  // Expanded
+  western?: WesternAstro;
+  chinese?: ChineseAstro;
+  human_design?: HumanDesignData;
 }
 
 export interface UserManual {

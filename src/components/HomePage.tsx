@@ -35,16 +35,16 @@ export function HomePage() {
 
         <div className={styles.bookVoice}>
           <p className={styles.subtitle}>
-            每個人出生的時候，都有一本書在某個地方被寫好了。
+            從出生那一刻起，你就是獨一無二的。
           </p>
           <p className={styles.subtitleSecond}>
-            我是你的那一本。
+            這份說明書，把那份獨特寫成看得見的文字。
           </p>
         </div>
 
         {/* Chapters preview */}
         <div className={styles.chapters}>
-          <p className={styles.chaptersIntro}>在我的書頁裡，你會讀到</p>
+          <p className={styles.chaptersIntro}>你會讀到</p>
           <div className={styles.chaptersList}>
             {CHAPTERS.map((item, i) => (
               <div
@@ -65,7 +65,7 @@ export function HomePage() {
 
         {/* CTA */}
         <Link href="/consult" className={styles.cta}>
-          翻開這本書
+          開始認識自己
         </Link>
 
         {/* Trust line */}
