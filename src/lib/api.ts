@@ -196,12 +196,20 @@ export interface DetailResponse {
 }
 
 /**
- * Get detailed reading for a specific system
+ * Get detailed reading for a specific system (requires auth)
  */
-export async function getManualDetail(manualId: string, system: DetailSystem): Promise<DetailResponse> {
-  const response = await fetch(`${API_URL}/manual/${manualId}/detail/${system}`);
+export async function getManualDetail(manualId: string, system: DetailSystem, accessToken?: string): Promise<DetailResponse> {
+  const headers: Record<string, string> = {};
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
+  
+  const response = await fetch(`${API_URL}/manual/${manualId}/detail/${system}`, { headers });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error('NEED_LOGIN');
+    }
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || '載入失敗');
   }

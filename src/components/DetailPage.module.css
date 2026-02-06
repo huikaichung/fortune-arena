@@ -145,3 +145,26 @@
   .centersGrid { grid-template-columns: 1fr; }
   .elementsRow { flex-wrap: wrap; }
 }
+
+
+/* Login prompt */
+.loginPrompt {
+  text-align: center;
+  padding: var(--space-16) var(--space-6);
+}
+
+.loginPrompt h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  margin-bottom: var(--space-3);
+}
+
+.loginPrompt p {
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.loginPrompt button {
+  padding: 0.875rem 2rem;
+}

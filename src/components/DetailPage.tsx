@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getManualDetail, type DetailSystem, type DetailResponse } from '@/lib/api';
+import { useAuth } from './AuthContext';
+import { LoginModal } from './LoginModal';
+import { getAccessToken } from '@/lib/auth';
 import { NatalChart } from './charts/NatalChart';
 import { BodyGraph } from './charts/BodyGraph';
 import styles from './DetailPage.module.css';
@@ -28,28 +31,85 @@ const LOADING_HINTS: Record<string, string> = {
 };
 
 export function DetailPage({ manualId }: Props) {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
   const [results, setResults] = useState<Record<string, { data?: DetailResponse; loading: boolean; error?: string }>>({});
+  const [needLogin, setNeedLogin] = useState(false);
 
   const completed = Object.values(results).filter(r => !r.loading).length;
   const total = SYSTEMS.length;
 
   useEffect(() => {
+    if (authLoading) return;
+    
+    if (!isAuthenticated) {
+      setNeedLogin(true);
+      return;
+    }
+
     // Init all as loading
-    const init: typeof results = {};
+    const init: Record<string, { data?: DetailResponse; loading: boolean; error?: string }> = {};
     SYSTEMS.forEach(s => { init[s.key] = { loading: true }; });
     setResults(init);
 
-    // Fire all in parallel
+    // Fire all in parallel with auth token
+    const token = getAccessToken();
     SYSTEMS.forEach(({ key }) => {
-      getManualDetail(manualId, key)
+      getManualDetail(manualId, key, token || undefined)
         .then(data => {
           setResults(prev => ({ ...prev, [key]: { data, loading: false } }));
         })
         .catch(err => {
+          if (err.message === 'NEED_LOGIN') {
+            setNeedLogin(true);
+          }
           setResults(prev => ({ ...prev, [key]: { loading: false, error: err.message } }));
         });
     });
-  }, [manualId]);
+  }, [manualId, isAuthenticated, authLoading]);
+
+  const handleLoginSuccess = () => {
+    setNeedLogin(false);
+    // Refresh the page to reload with auth
+    window.location.reload();
+  };
+
+  // Show login prompt if not authenticated
+  if (needLogin && !isAuthenticated) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.meshBg}><div className={styles.orbPurple} /></div>
+        
+        <header className={styles.header}>
+          <Link href={`/manual/${manualId}`} className={styles.back}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M12 15l-5-5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            返回說明書
+          </Link>
+        </header>
+
+        <main className={styles.main}>
+          <div className={styles.loginPrompt}>
+            <h2>登入解鎖完整解讀</h2>
+            <p>詳細的五大系統命盤分析需要登入後才能查看</p>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => setShowLogin(true)}
+            >
+              登入 / 註冊
+            </button>
+          </div>
+        </main>
+
+        <LoginModal 
+          isOpen={showLogin} 
+          onClose={() => setShowLogin(false)} 
+          onSuccess={handleLoginSuccess}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.page}>
