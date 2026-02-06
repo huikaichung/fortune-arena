@@ -87,11 +87,39 @@ export interface WesternAstro {
   has_birth_time?: boolean;
 }
 
+export interface ZiweiPattern {
+  id?: string;
+  name: string;           // 紫府同宮格
+  category?: string;      // 富貴格
+  interpretation?: string;
+  matched_stars?: string[];
+}
+
+export interface ZiweiPalace {
+  name: string;           // 命宮
+  branch: string;         // 子
+  major_stars: string[];  // [紫微, 天府]
+  minor_stars?: string[];
+  sihua?: string[];       // [化祿, 化權]
+}
+
+export interface ZiweiChart {
+  lunar_date?: string;    // 農曆 1990年6月15日
+  year_pillar?: string;   // 庚午
+  wu_xing_ju?: string;    // 土五局
+  ming_gong_branch?: string;
+  shen_gong_branch?: string;
+  palaces?: ZiweiPalace[];
+  patterns?: ZiweiPattern[];
+  calculation_method?: string;
+}
+
 export interface ChineseAstro {
   zodiac: string;
   element: string;
   bazi_day_master?: string;
   bazi_summary?: string;
+  ziwei?: ZiweiChart;
 }
 
 export interface HumanDesignData {
