@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { generateManual } from '@/lib/api';
+import { CitySelector, City } from './CitySelector';
 import styles from './ConsultPage.module.css';
 
 const LOADING_PHASES = [
@@ -16,7 +17,7 @@ export function ConsultPage() {
   const router = useRouter();
   const [birthDate, setBirthDate] = useState('');
   const [birthTime, setBirthTime] = useState('');
-  const [birthPlace, setBirthPlace] = useState('');
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [gender, setGender] = useState<'male' | 'female' | ''>('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPhase, setLoadingPhase] = useState(0);
@@ -63,7 +64,10 @@ export function ConsultPage() {
         birth_info: {
           birth_date: birthDate,
           birth_time: birthTime || undefined,
-          birth_place: birthPlace || undefined,
+          birth_place: selectedCity?.name || undefined,
+          latitude: selectedCity?.latitude,
+          longitude: selectedCity?.longitude,
+          timezone: selectedCity?.timezone,
           gender: gender || undefined,
         },
       });
@@ -167,13 +171,12 @@ export function ConsultPage() {
             {/* Birth place */}
             <div className={styles.field}>
               <label htmlFor="birthPlace">出生地點</label>
-              <input
-                type="text"
-                id="birthPlace"
-                value={birthPlace}
-                onChange={e => setBirthPlace(e.target.value)}
-                placeholder="例：台北市"
+              <CitySelector
+                value={selectedCity}
+                onChange={setSelectedCity}
+                placeholder="搜索出生城市..."
               />
+              <span className={styles.hint}>選填，可提升星盤計算精準度</span>
             </div>
 
             {/* Gender */}

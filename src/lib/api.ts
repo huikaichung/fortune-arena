@@ -8,8 +8,10 @@ export interface BirthInfo {
   birth_date: string;
   birth_time?: string;
   birth_place?: string;
-  gender?: 'male' | 'female';
+  latitude?: number;
+  longitude?: number;
   timezone?: string;
+  gender?: 'male' | 'female';
 }
 
 export interface GenerateManualRequest {
@@ -40,12 +42,49 @@ export interface LuckyGuide {
   season: string;
 }
 
+export interface PlanetPosition {
+  name: string;
+  name_en?: string;
+  sign: string;
+  sign_en?: string;
+  element?: string;
+  degree?: number;
+  retrograde?: boolean;
+  house?: number;
+}
+
+export interface AspectData {
+  planet1: string;
+  planet2: string;
+  aspect: string;
+  orb: number;
+}
+
+export interface ChartPattern {
+  name: string;           // Grand Trine
+  name_cn: string;        // 大三角
+  planets: string[];      // [太陽, 月亮, 木星]
+  element?: string;       // 水象 (for Grand Trine)
+  sign?: string;          // 巨蟹座 (for Stellium)
+  apex?: string;          // 頂點行星 (for T-Square)
+  interpretation?: string;
+}
+
 export interface WesternAstro {
   sun_sign: string;
   sun_element: string;
   moon_sign?: string;
   rising_sign?: string;
   sun_traits?: string;
+  // Enhanced precision fields
+  sun_degree?: number;
+  moon_degree?: number;
+  asc_degree?: number;
+  planets?: PlanetPosition[];
+  aspects?: AspectData[];
+  patterns?: ChartPattern[];   // 格局：大三角、T三角等
+  calculation_method?: 'ai_estimated' | 'kerykeion_swiss_ephemeris';
+  has_birth_time?: boolean;
 }
 
 export interface ChineseAstro {
