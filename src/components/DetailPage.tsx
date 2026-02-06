@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getManualDetail, type DetailSystem, type DetailResponse } from '@/lib/api';
+import { NatalChart } from './charts/NatalChart';
+import { BodyGraph } from './charts/BodyGraph';
 import styles from './DetailPage.module.css';
 
 interface Props {
@@ -152,6 +154,13 @@ function WesternRender({ data }: { data: any }) {
 
   return (
     <div className={styles.systemContent}>
+      {/* Natal Chart SVG */}
+      {planets.length > 0 && (
+        <div className={styles.chartContainer}>
+          <NatalChart planets={planets} ascendant={asc} />
+        </div>
+      )}
+
       {/* Ascendant + MC */}
       <div className={styles.subSection}>
         <h3>基本軸點</h3>
@@ -393,6 +402,13 @@ function HumanDesignRender({ data }: { data: any }) {
 
   return (
     <div className={styles.systemContent}>
+      {/* Body Graph SVG */}
+      {centers.length > 0 && (
+        <div className={styles.chartContainer}>
+          <BodyGraph centers={centers} channels={channels} />
+        </div>
+      )}
+
       {/* Core */}
       <div className={styles.subSection}>
         <h3>核心資訊</h3>

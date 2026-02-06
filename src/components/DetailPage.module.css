@@ -49,6 +49,9 @@
 .subSection { display: flex; flex-direction: column; gap: var(--space-3); }
 .subSection h3 { font-size: 0.92rem; font-weight: 600; color: var(--accent-primary); letter-spacing: 0.03em; opacity: 0.85; }
 
+/* Chart container */
+.chartContainer { display: flex; justify-content: center; padding: var(--space-4) 0; margin-bottom: var(--space-4); }
+
 /* Data pills */
 .dataPill { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-md); margin-right: var(--space-2); margin-bottom: var(--space-2); }
 .pillLabel { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
