@@ -141,3 +141,73 @@ export async function getManualDetail(manualId: string, system: DetailSystem): P
 
   return response.json();
 }
+
+// ============================================================
+// USER STORAGE
+// ============================================================
+
+/**
+ * Save a manual to user's collection
+ */
+export async function saveManual(userId: string, manualId: string): Promise<{ success: boolean; doc_id: string }> {
+  const response = await fetch(`${API_URL}/manual/save`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, manual_id: manualId }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || '儲存失敗');
+  }
+
+  return response.json();
+}
+
+export interface SavedManualSummary {
+  id: string;
+  birth_date: string;
+  profile: { label: string; tagline: string };
+  saved_at: string;
+}
+
+/**
+ * List user's saved manuals
+ */
+export async function listSavedManuals(userId: string): Promise<{ manuals: SavedManualSummary[] }> {
+  const response = await fetch(`${API_URL}/manual/user/${userId}`);
+
+  if (!response.ok) {
+    throw new Error('載入失敗');
+  }
+
+  return response.json();
+}
+
+/**
+ * Get a saved manual
+ */
+export async function getSavedManual(userId: string, manualId: string): Promise<UserManual> {
+  const response = await fetch(`${API_URL}/manual/user/${userId}/${manualId}`);
+
+  if (!response.ok) {
+    throw new Error('找不到已儲存的說明書');
+  }
+
+  return response.json();
+}
+
+/**
+ * Delete a saved manual
+ */
+export async function deleteSavedManual(userId: string, manualId: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${API_URL}/manual/user/${userId}/${manualId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('刪除失敗');
+  }
+
+  return response.json();
+}
